@@ -4,9 +4,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Student_Info
+from .models import Student_Info, Political_Leaders
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import RegistrationSerializer, LoginSerializer, UserProfileSerializer
+from .serializers import RegistrationSerializer, LoginSerializer, CreateSerializer, UpdateSerializer
 from .constants import Error_Messages
 
 
@@ -83,10 +83,12 @@ class UserProfile(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        return UserProfileSerializer
+        if self.action in ['list', 'create']:
+            return CreateSerializer
+        return UpdateSerializer
 
     def get_queryset(self, pk=None):
-        return Student_Info.objects.filter().order_by('id')
+        return Political_Leaders.objects.filter().order_by('id')
 
     def list(self, request, *args, **kwargs):
         """

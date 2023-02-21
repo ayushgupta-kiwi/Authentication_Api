@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .constants import Validation_Error, Error_Messages
-from .models import Student_Info
+from .models import Student_Info, Political_Leaders
 from django.contrib.auth.hashers import make_password
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -151,14 +151,67 @@ class LoginSerializer(serializers.ModelSerializer):
         model = Student_Info
         fields = ['username', 'password']
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class CreateSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a display view in Django
     """
+    name = serializers.CharField(max_length=30)
+    date_of_birth = serializers.DateField()
+    date_of_death = serializers.DateField()
+    place_of_birth = serializers.CharField(max_length=30)
+    description = serializers.CharField(max_length=200)
+
+    def create(self, validated_data):
+        """
+         override the create method to add custom behavior
+        :param validated_data: validated data
+        :return: user object
+        """
+        user = Political_Leaders.objects.create(
+            name=validated_data['name'],
+            date_of_birth=validated_data['date_of_birth'],
+            date_of_death=validated_data['date_of_death'],
+            place_of_birth=validated_data['place_of_birth'],
+            description=validated_data['description'],
+        )
+        return user
 
     class Meta:
         """
             Meta class of the Student Info model to display the fields of UserProfile serializer
         """
-        model = Student_Info
-        fields = ['id', 'email', 'first_name', 'last_name', 'contact']
+        model = Political_Leaders
+        fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']
+
+
+class UpdateSerializer(serializers.ModelSerializer):
+    """
+        Define a serializer for a display view in Django
+    """
+    name = serializers.CharField(max_length=30)
+    date_of_birth = serializers.DateField()
+    date_of_death = serializers.DateField()
+    place_of_birth = serializers.CharField(max_length=30)
+    description = serializers.CharField(max_length=200)
+
+    def update(self, instance, validated_data):
+        """
+         override the create method to add custom behavior
+        :param validated_data: validated data
+        :return: user object
+        """
+        stu = Political_Leaders.objects.filter(id=instance.id).update(
+            name=validated_data.get('name'),
+            date_of_birth=validated_data.get('date_of_birth'),
+            date_of_death=validated_data.get('date_of_death'),
+            place_of_birth=validated_data.get('place_of_birth'),
+            description=validated_data.get('description'),
+        )
+        return stu
+
+    class Meta:
+        """
+            Meta class of the Student Info model to display the fields of UserProfile serializer
+        """
+        model = Political_Leaders
+        fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']
