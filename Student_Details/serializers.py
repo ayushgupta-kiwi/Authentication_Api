@@ -155,11 +155,11 @@ class CreateSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a display view in Django
     """
-    name = serializers.CharField(max_length=30)
-    date_of_birth = serializers.DateField()
-    date_of_death = serializers.DateField()
-    place_of_birth = serializers.CharField(max_length=30)
-    description = serializers.CharField(max_length=200)
+    name = serializers.CharField(max_length=30, required=True)
+    date_of_birth = serializers.DateField(required=True)
+    date_of_death = serializers.DateField(required=True)
+    place_of_birth = serializers.CharField(max_length=30, required=True)
+    description = serializers.CharField(max_length=500, required=True)
 
     def create(self, validated_data):
         """
@@ -188,11 +188,11 @@ class UpdateSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a display view in Django
     """
-    name = serializers.CharField(max_length=30)
-    date_of_birth = serializers.DateField()
-    date_of_death = serializers.DateField()
-    place_of_birth = serializers.CharField(max_length=30)
-    description = serializers.CharField(max_length=200)
+    name = serializers.CharField(max_length=30, required=True)
+    date_of_birth = serializers.DateField(required=True)
+    date_of_death = serializers.DateField(required=True)
+    place_of_birth = serializers.CharField(max_length=30, required=True)
+    description = serializers.CharField(max_length=500, required=True)
 
     def update(self, instance, validated_data):
         """

@@ -26,7 +26,7 @@ class Political_Leaders(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=30)
-    description = models.TextField(max_length=200)
+    description = models.TextField(max_length=500)
 
     class Meta:
         db_table = 'Political Leaders'
