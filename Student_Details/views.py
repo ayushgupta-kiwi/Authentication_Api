@@ -1,16 +1,19 @@
 # Create your views here.
-from django.contrib import auth
-from rest_framework import viewsets, status
+from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Student_Info
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import RegistrationSerializer, LoginSerializer, UserProfileSerializer
-from .constants import INVALID, REGISTER, LOGIN, DATA_CREATED, DATA_NOT_UPDATED, DATA_DELETED
+from .constants import Error_Messages
 
 
 def get_token_for_user(user):
+    """
+        This function is used to generate jwt token
+    """
     refresh = RefreshToken.for_user(user)
 
     return {
@@ -37,11 +40,11 @@ class StudentRegister(viewsets.ModelViewSet):
         """
         Creates a new instance of the Student model.
         """
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.create(serializer.validated_data)
-            return Response({'message': REGISTER}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            return Response(Error_Messages['Registration']['success'], status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StudentLogin(viewsets.ModelViewSet):
@@ -56,16 +59,20 @@ class StudentLogin(viewsets.ModelViewSet):
         return Student_Info.objects.filter()
 
     def create(self, request, *args, **kwargs):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        """
+        Allows only valid user to login.
+        """
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh token': str(refresh),
+                'access token': str(refresh.access_token),
+                'message': Error_Messages['Login']['success'],
+            }, status=status.HTTP_200_OK)
 
-        user = auth.authenticate(request, username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-            token = get_token_for_user(user)
-            return Response({'token': token, 'message': LOGIN}, status=status.HTTP_202_ACCEPTED)
-        else:
-            return Response({'message': INVALID}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserProfile(viewsets.ModelViewSet):
@@ -74,7 +81,9 @@ class UserProfile(viewsets.ModelViewSet):
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = UserProfileSerializer
+
+    def get_serializer_class(self):
+        return UserProfileSerializer
 
     def get_queryset(self, pk=None):
         return Student_Info.objects.filter().order_by('id')
@@ -101,8 +110,8 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg': DATA_CREATED}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         """
@@ -112,8 +121,8 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(stu, data=request.data)
         if serializer.is_valid():
             serializer.update(stu, serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({'msg': DATA_NOT_UPDATED}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         """
@@ -123,8 +132,8 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(stu, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.update(stu, serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({'msg': DATA_NOT_UPDATED}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -132,5 +141,4 @@ class UserProfile(viewsets.ModelViewSet):
         """
         stu = self.get_object()
         stu.delete()
-        return Response({'msg': DATA_DELETED})
-
+        return Response(status=status.HTTP_200_OK)

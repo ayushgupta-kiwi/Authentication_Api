@@ -1,18 +1,46 @@
-# Constant messages
+# Constant messages file
 
-UserName = "username not found"
-Password = "The provided password is incorrect."
-UserName1 = "Username already taken"
-Email = "Account with this Email already exists"
-REGISTER = "CREATED_SUCCESSFULLY"
-BAD_REQUEST = "BAD_REQUEST"
-LOGIN = "Login Successfull"
-INVALID = "Username Or Password Doesn't Match"
-Password1 = "Password Does Not Match"
-REQUIRED = "This field is required"
-CONTACT = "Contact is not valid"
-EXIST = "Contact already exist"
-DATA_NOT_CREATED = "Invalid Data"
-DATA_NOT_UPDATED = "Update Failed"
-DATA_DELETED = "Data deleted successfully"
-DATA_CREATED = "Data created successfully"
+Validation_Error = {
+    'first_name': {
+        "blank": "First Name required",
+        "spaces": "Space not allowed",
+        "invalid": "Invalid value",
+    },
+    'last_name': {
+        "blank": "Last Name required",
+        "spaces": "Space not allowed",
+        "invalid": "Invalid value",
+    },
+    'contact': {
+        "blank": "Contact required",
+        "invalid": "Invalid value",
+        "exist": "Contact Already Exist"
+    },
+    'email': {
+        "blank": "Email Required",
+        "invalid": "Invalid Email",
+        "exist": "Email already exist"
+    },
+    'username': {
+        "blank": "Username Required",
+        "invalid": "Invalid Username",
+        "exist": "Username already exist",
+    },
+    'password': {
+        "blank": "Password Required",
+        "value": "Password must contain uppercase, lowercase, digit and special character",
+        "equal": "Password doesn't match"
+    }
+}
+
+Error_Messages = {
+    'Registration': {
+        "success": "Registration Success",
+        "bad_request": "Registration Failed"
+    },
+    'Login': {
+        "success": "Login Success",
+        "bad_request": "Invalid Credentials / Login Failed"
+    },
+}
+

@@ -14,9 +14,9 @@ class Student_Info(AbstractUser):
     email = models.EmailField(unique=True, null=True, blank=True)
     password = models.CharField(max_length=255)
 
-    class Meta:
-        db_table = 'Student'
-
     def __str__(self):
         return self.username
+
+    class Meta:
+        db_table = 'Student'
 
