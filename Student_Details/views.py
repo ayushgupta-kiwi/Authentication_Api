@@ -40,7 +40,7 @@ class StudentRegister(viewsets.ModelViewSet):
         """
         Creates a new instance of the Student model.
         """
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.create(serializer.validated_data)
             return Response(Error_Messages['Registration']['success'], status=status.HTTP_201_CREATED)
