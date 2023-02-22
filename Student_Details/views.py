@@ -34,7 +34,7 @@ class StudentRegister(viewsets.ModelViewSet):
         """
         The get_queryset method returns a queryset of Student Model objects.
         """
-        return Student_Info.objects.filter()
+        return Student_Info.objects.all()
 
     def create(self, request, *args, **kwargs):
         """
