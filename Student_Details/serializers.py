@@ -83,6 +83,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(Validation_Error['username']['blank'])
         if not value.isalnum() or ' ' in value:
             raise serializers.ValidationError(Validation_Error['username']['invalid'])
+        if not any(char.isalpha() for char in value):
+            raise serializers.ValidationError(Validation_Error['username']['invalid'])
         return value
 
     def validate_password(self, value):
