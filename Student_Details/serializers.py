@@ -4,6 +4,7 @@ from .constants import Validation_Error, Error_Messages
 from .models import Student_Info, Political_Leaders
 from django.contrib.auth.hashers import make_password
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
     """
     Serializers registration requests and creates a new user.
@@ -18,13 +19,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=20, min_length=3, required=True, trim_whitespace=False,
                                      error_messages=Validation_Error['username'])
     password = serializers.CharField(max_length=20, min_length=8, write_only=True, required=True,
-                                     trim_whitespace=False ,error_messages=Validation_Error['password'])
+                                     trim_whitespace=False, error_messages=Validation_Error['password'])
     c_password = serializers.CharField(max_length=20, min_length=8, write_only=True, required=True,
                                        trim_whitespace=False, error_messages=Validation_Error['password'])
 
     def validate(self, data):
         """
-            Object level validation to check weather the given field is exist or not and to match passwords
+            Object level validation to check weather the given field exist or not and to match passwords
         """
         username = data.get('username')
         email = data.get('email')
@@ -101,7 +102,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-            create funtion to create validated user data
+            create function to create validated user data
         """
         stu = Student_Info.objects.create(
             first_name=validated_data['first_name'],
@@ -115,7 +116,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Meta class of the Student Info model to display the fields of Registration serializer
+            Metaclass of the Student Info model to display the fields of Registration serializer
         """
         model = Student_Info
         fields = ['id', 'first_name', 'last_name', 'email', 'contact',
@@ -130,7 +131,6 @@ class LoginSerializer(serializers.ModelSerializer):
                                      error_messages=Validation_Error['username'])
     password = serializers.CharField(max_length=20, min_length=8, write_only=True, required=True,
                                      trim_whitespace=False, error_messages=Validation_Error['password'])
-
 
     def validate(self, data):
         """
@@ -148,10 +148,11 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Meta class of the Student Info model to display the fields of Login serializer
+            Metaclass of the Student Info model to display the fields of Login serializer
         """
         model = Student_Info
         fields = ['username', 'password']
+
 
 class CreateSerializer(serializers.ModelSerializer):
     """
@@ -180,7 +181,7 @@ class CreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Meta class of the Student Info model to display the fields of UserProfile serializer
+            Metaclass of the Student Info model to display the fields of UserProfile serializer
         """
         model = Political_Leaders
         fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']
@@ -213,7 +214,7 @@ class UpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Meta class of the Student Info model to display the fields of UserProfile serializer
+            Metaclass of the Student Info model to display the fields of UserProfile serializer
         """
         model = Political_Leaders
         fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']

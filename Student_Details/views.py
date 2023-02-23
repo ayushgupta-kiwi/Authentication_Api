@@ -10,18 +10,6 @@ from .serializers import RegistrationSerializer, LoginSerializer, CreateSerializ
 from .constants import Error_Messages
 
 
-def get_token_for_user(user):
-    """
-        This function is used to generate jwt token
-    """
-    refresh = RefreshToken.for_user(user)
-
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token)
-    }
-
-
 class StudentRegister(viewsets.ModelViewSet):
     """
         To Register the Validated User
