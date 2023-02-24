@@ -183,13 +183,7 @@ class CreateSerializer(serializers.ModelSerializer):
         :param validated_data: validated data
         :return: user object
         """
-        user = Political_Leaders.objects.create(
-            name=validated_data['name'],
-            date_of_birth=validated_data['date_of_birth'],
-            date_of_death=validated_data['date_of_death'],
-            place_of_birth=validated_data['place_of_birth'],
-            description=validated_data['description'],
-        )
+        user = Political_Leaders.objects.create(**validated_data)
         return user
 
     class Meta:
@@ -217,13 +211,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         :param validated_data: validated data
         :return: user object
         """
-        stu = Political_Leaders.objects.filter(id=instance.id).update(
-            name=validated_data.get('name'),
-            date_of_birth=validated_data.get('date_of_birth'),
-            date_of_death=validated_data.get('date_of_death'),
-            place_of_birth=validated_data.get('place_of_birth'),
-            description=validated_data.get('description'),
-        )
+        stu = Political_Leaders.objects.filter(id=instance.id).update(**validated_data)
         return stu
 
     class Meta:

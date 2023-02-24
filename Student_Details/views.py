@@ -100,7 +100,8 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.create(serializer.validated_data)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({'message': Error_Messages['Crud']['success'], 'data': serializer.data},
+                            status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
@@ -111,8 +112,9 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(stu, data=request.data)
         if serializer.is_valid():
             serializer.update(stu, serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': Error_Messages['Crud']['success'], 'data': serializer.data},
+                            status=status.HTTP_205_RESET_CONTENT)
+        return Response({'message': Error_Messages['Crud']['bad_request']}, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         """
@@ -122,8 +124,9 @@ class UserProfile(viewsets.ModelViewSet):
         serializer = self.get_serializer(stu, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.update(stu, serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': Error_Messages['Crud']['success'], 'data': serializer.data},
+                            status=status.HTTP_206_PARTIAL_CONTENT)
+        return Response({'message': Error_Messages['Crud']['bad_request']}, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -131,4 +134,4 @@ class UserProfile(viewsets.ModelViewSet):
         """
         stu = self.get_object()
         stu.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response({'message': Error_Messages['Crud']['success']}, status=status.HTTP_200_OK)

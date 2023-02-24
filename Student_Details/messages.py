@@ -51,4 +51,8 @@ Error_Messages = {
         "success": "Login Success",
         "bad_request": "Invalid Credentials / Login Failed"
     },
+    'Crud': {
+        "success": "Request Successful",
+        "bad_request": "Bad Request"
+    }
 }
