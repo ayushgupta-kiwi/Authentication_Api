@@ -30,6 +30,11 @@ Validation_Error = {
         "blank": "Password Required",
         "value": "Password must contain uppercase, lowercase, digit and special character",
         "equal": "Password doesn't match"
+    },
+    'name': {
+        "blank": "Name cannot be blank",
+        "spaces": "Space not allowed",
+        "invalid": "Invalid value",
     }
 }
 
@@ -43,4 +48,3 @@ Error_Messages = {
         "bad_request": "Invalid Credentials / Login Failed"
     },
 }
-

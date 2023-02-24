@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .constants import Validation_Error, Error_Messages
+from .messages import Validation_Error, Error_Messages
 from .models import Student_Info, Political_Leaders
 from django.contrib.auth.hashers import make_password
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     """
-    Serializers registration requests and creates a new user.
+        Serializers registration requests and creates a new user.
     """
     first_name = serializers.CharField(max_length=20, min_length=3, required=True, trim_whitespace=False,
                                        error_messages=Validation_Error['first_name'])
@@ -90,7 +90,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate_password(self, value):
         """
-        Validate if password contains uppercase, lowercase, digit, space and special character.
+            Validate if password contains uppercase, lowercase, digit, space and special character.
         """
         if not any(char.isupper() for char in value) or not any(char.islower() for char in value) or \
                 not any(char.isdigit() for char in value) or \
@@ -134,7 +134,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """
-        Validate if username or password is incorrect.
+            Validate if username or password is incorrect.
         """
         username = data.get('username')
         password = data.get('password')
@@ -158,11 +158,24 @@ class CreateSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a display view in Django
     """
-    name = serializers.CharField(max_length=30, required=True)
+    name = serializers.CharField(max_length=30, min_length=3, required=True, trim_whitespace=False,
+                                 error_messages=Validation_Error['name'])
     date_of_birth = serializers.DateField(required=True)
     date_of_death = serializers.DateField(required=True)
     place_of_birth = serializers.CharField(max_length=30, required=True)
     description = serializers.CharField(max_length=500, required=True)
+
+    def validate_name(self, value):
+        """
+            Field level validation to validate name
+        """
+        if not value:
+            raise serializers.ValidationError(Validation_Error['name']['blank'])
+        if ' ' in value:
+            raise serializers.ValidationError(Validation_Error['name']['spaces'])
+        if not value.isalpha():
+            raise serializers.ValidationError(Validation_Error['name']['invalid'])
+        return value
 
     def create(self, validated_data):
         """
@@ -191,7 +204,8 @@ class UpdateSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a display view in Django
     """
-    name = serializers.CharField(max_length=30, required=True)
+    name = serializers.CharField(max_length=30, required=True, trim_whitespace=False,
+                                 error_messages=Validation_Error["name"])
     date_of_birth = serializers.DateField(required=True)
     date_of_death = serializers.DateField(required=True)
     place_of_birth = serializers.CharField(max_length=30, required=True)
@@ -214,7 +228,7 @@ class UpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Metaclass of the Student Info model to display the fields of UserProfile serializer
+            Metaclass of the Student Info model to display the fields of Update serializer
         """
         model = Political_Leaders
         fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']
