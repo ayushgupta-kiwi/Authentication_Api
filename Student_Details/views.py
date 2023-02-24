@@ -99,7 +99,7 @@ class UserProfile(viewsets.ModelViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.create(serializer.validated_data)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
