@@ -205,6 +205,18 @@ class UpdateSerializer(serializers.ModelSerializer):
     place_of_birth = serializers.CharField(max_length=30, required=True)
     description = serializers.CharField(max_length=500, required=True)
 
+    def validate_name(self, value):
+        """
+            Field level validation to validate name
+        """
+        if not value:
+            raise serializers.ValidationError(Validation_Error['name']['blank'])
+        if ' ' in value:
+            raise serializers.ValidationError(Validation_Error['name']['spaces'])
+        if not value.isalpha():
+            raise serializers.ValidationError(Validation_Error['name']['invalid'])
+        return value
+
     def update(self, instance, validated_data):
         """
          override the create method to add custom behavior
