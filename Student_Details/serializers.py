@@ -127,7 +127,7 @@ class LoginSerializer(serializers.ModelSerializer):
     """
         Define a serializer for a login view in Django
     """
-    username = serializers.CharField(max_length=20, required=True, trim_whitespace=False,
+    username = serializers.CharField(max_length=20,min_length=3, required=True, trim_whitespace=False,
                                      error_messages=Validation_Error['username'])
     password = serializers.CharField(max_length=20, min_length=8, write_only=True, required=True,
                                      trim_whitespace=False, error_messages=Validation_Error['password'])
@@ -228,7 +228,7 @@ class UpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Metaclass of the Student Info model to display the fields of Update serializer
+            Metaclass of the Political Leader model to display the fields of Update serializer
         """
         model = Political_Leaders
         fields = ['id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description']

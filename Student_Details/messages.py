@@ -1,4 +1,8 @@
-# Constant messages file
+# Write your Error messages here
+
+"""
+    This defines the messages that are given in the validation fields
+"""
 
 Validation_Error = {
     'first_name': {

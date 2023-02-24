@@ -22,11 +22,17 @@ class Student_Info(AbstractUser):
 
 
 class Political_Leaders(models.Model):
+    """
+        Create model class to store data in database
+    """
     name = models.CharField(max_length=30)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=30)
     description = models.TextField(max_length=500)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'Political Leaders'

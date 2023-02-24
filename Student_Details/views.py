@@ -20,13 +20,13 @@ class StudentRegister(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        The get_queryset method returns a queryset of Student Model objects.
+        The get_queryset method returns a queryset of Student_Info Model objects.
         """
         return Student_Info.objects.all()
 
     def create(self, request, *args, **kwargs):
         """
-        Creates a new instance of the Student model.
+        Creates a new instance of the Student_Info model.
         """
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -42,7 +42,7 @@ class StudentLogin(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        The get_queryset method returns a queryset of Student Model objects.
+        The get_queryset method returns a queryset of Student_Info Model objects.
         """
         return Student_Info.objects.filter()
 
@@ -75,7 +75,7 @@ class UserProfile(viewsets.ModelViewSet):
             return CreateSerializer
         return UpdateSerializer
 
-    def get_queryset(self, pk=None):
+    def get_queryset(self):
         return Political_Leaders.objects.filter().order_by('id')
 
     def list(self, request, *args, **kwargs):

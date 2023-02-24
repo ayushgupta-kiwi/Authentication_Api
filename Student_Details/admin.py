@@ -11,6 +11,10 @@ class DetailsAdmin(admin.ModelAdmin):
     list_display = ('id', 'first_name', 'last_name', 'username', 'email', 'contact', 'password')
 
 
+# Register the Political_Leaders model with the admin site
 @admin.register(Political_Leaders)
 class LeaderAdmin(admin.ModelAdmin):
+    """
+        Define which fields to display in the list view of the admin page
+    """
     list_display = ('id', 'name', 'date_of_birth', 'date_of_death', 'place_of_birth', 'description')
