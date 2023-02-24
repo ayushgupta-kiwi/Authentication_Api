@@ -1,3 +1,5 @@
+# Create Serializer Classes
+
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .messages import Validation_Error, Error_Messages
@@ -22,23 +24,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
                                      trim_whitespace=False, error_messages=Validation_Error['password'])
     c_password = serializers.CharField(max_length=20, min_length=8, write_only=True, required=True,
                                        trim_whitespace=False, error_messages=Validation_Error['password'])
-
-    def validate(self, data):
-        """
-            Object level validation to check weather the given field exist or not and to match passwords
-        """
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
-        c_password = data.get('c_password')
-
-        if Student_Info.objects.filter(username=username).exists():
-            raise serializers.ValidationError(Validation_Error['username']['exist'])
-        if Student_Info.objects.filter(email=email).exists():
-            raise serializers.ValidationError(Validation_Error['email']['exist'])
-        elif password != c_password:
-            raise serializers.ValidationError(Validation_Error['password']['equal'])
-        return data
 
     def validate_first_name(self, value):
         """
@@ -99,6 +84,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if " " in value:
             raise serializers.ValidationError(Validation_Error['last_name']['spaces'])
         return value
+
+    def validate(self, data):
+        """
+            Object level validation to check weather the given field exist or not and to match passwords
+        """
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        c_password = data.get('c_password')
+
+        if Student_Info.objects.filter(username=username).exists():
+            raise serializers.ValidationError(Validation_Error['username']['exist'])
+        if Student_Info.objects.filter(email=email).exists():
+            raise serializers.ValidationError(Validation_Error['email']['exist'])
+        elif password != c_password:
+            raise serializers.ValidationError(Validation_Error['password']['equal'])
+        return data
 
     def create(self, validated_data):
         """
